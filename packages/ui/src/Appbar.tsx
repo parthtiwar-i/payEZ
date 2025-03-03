@@ -30,7 +30,7 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
     <>
       {/* Floating App Bar with Neon Effect */}
       <div className="fixed top-0 left-0 right-0 z-50">
-        <div className="mx-4 mt-4 bg-black/80 backdrop-blur-md rounded-xl shadow-lg border border-purple-500/30 relative overflow-hidden">
+        <div className="bg-black/80 backdrop-blur-md shadow-lg border border-purple-500/30 relative overflow-hidden">
           {/* Neon glow effects */}
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 opacity-20 blur-xl"></div>
           <div className="absolute -bottom-4 left-1/4 w-1/2 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 blur-sm"></div>
@@ -109,7 +109,7 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
       </div>
 
       {/* Spacer to prevent content from being hidden behind the fixed app bar */}
-      <div className="h-20"></div>
+      <div className="h-14"></div>
     </>
   );
 };

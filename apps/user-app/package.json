@@ -1,5 +1,5 @@
 {
-  "name": "docs",
+  "name": "user-app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -11,12 +11,14 @@
   "dependencies": {
     "@repo/store": "*",
     "@repo/ui": "*",
+    "@repo/db": "*",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "next": "^14.1.1",
     "next-auth": "^4.24.7",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.1.1",
