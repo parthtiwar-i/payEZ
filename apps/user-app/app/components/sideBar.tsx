@@ -64,6 +64,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               title="Transfer"
               icon={<TransferIcon />}
             />
+            <SidebarItem
+              href="p2p-transfer"
+              title="P2P Transfer"
+              icon={<TransferIcon />}
+            />
           </div>
         </div>
       </div>

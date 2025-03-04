@@ -1,32 +1,34 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import db from "@repo/db/client";
+import { z } from "zod";
 const app = express();
 
 app.use(express.json());
 
-app.post("/hdfcWebhook", async (req, res) => {
-  //TODO: Add zod validation here
-  //TODO: Add webhook secret check here to check if this come form original BANK
-  const paymentInformation: {
-    token: string;
-    userId: string;
-    amount: string;
-  } = {
-    token: req.body.token,
-    userId: req.body.userId,
-    amount: req.body.amount,
-  };
-  // Update balance in db, add txn
+const bodySchema = z.object({
+  token: z.string().min(1, "Token is required"),
+  userId: z.number().positive("User ID must be positive"),
+  amount: z.number(),
+});
+
+app.post("/hdfcWebhook", async (req: Request, res: Response): Promise<void> => {
   try {
+    const { success } = bodySchema.safeParse(req.body);
+    if (!success) {
+      res.status(400).json({
+        message: "Validation failed",
+      });
+    }
+    const paymentInformation = req.body;
+    // Update balance in db, add txn
     await db.$transaction([
       db.balance.updateMany({
         where: {
-          userId: Number(paymentInformation.userId),
+          userId: paymentInformation.userId,
         },
         data: {
           amount: {
-            // You can also get this from your DB
-            increment: Number(paymentInformation.amount),
+            increment: paymentInformation.amount,
           },
         },
       }),
@@ -40,14 +42,10 @@ app.post("/hdfcWebhook", async (req, res) => {
       }),
     ]);
 
-    res.status(200).json({
-      message: "Captured",
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(411).json({
-      message: "Error while processing webhook",
-    });
+    res.status(200).json({ message: "Captured" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error while processing webhook" });
   }
 });
 

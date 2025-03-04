@@ -5,28 +5,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import db, { OnRampStatus } from "@repo/db/client";
 
-// Sample data for recent transactions
-const recentTransactions = [
-  {
-    time: new Date("2024-01-15T10:30:00"),
-    amount: 50000,
-    status: OnRampStatus.Success,
-    provider: "HDFC Bank",
-  },
-  {
-    time: new Date("2024-01-14T15:45:00"),
-    amount: 100000,
-    status: OnRampStatus.Processing,
-    provider: "Axis Bank",
-  },
-  {
-    time: new Date("2024-01-13T09:15:00"),
-    amount: 25000,
-    status: OnRampStatus.Failure,
-    provider: "HDFC Bank",
-  },
-];
-
 const getBalance = async () => {
   const session = await getServerSession(authOptions);
 
@@ -55,8 +33,11 @@ const getOnRampTransaction = async () => {
 
 export default async function () {
   //get balance and onRampTransaction for db
-  const balance = await getBalance();
-  const transactions = await getOnRampTransaction();
+  const [balance, transactions] = await Promise.all([
+    await getBalance(),
+    await getOnRampTransaction(),
+  ]);
+  //in case of error due to anything like DB is down or prisma not defined we use a fallback UI data or redirect user to not-found page of next js or build your own
 
   return (
     <div className="pl-0 md:pl-64 transition-all duration-300 p-6">
