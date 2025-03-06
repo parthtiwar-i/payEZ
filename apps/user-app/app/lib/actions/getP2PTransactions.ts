@@ -24,6 +24,7 @@ export const getP2PTransactions = async () => {
     }
     return transactions;
   } catch (error) {
-    return { message: "Server error" };
+    console.error(error);
+    return { message: "Server error", error };
   }
 };

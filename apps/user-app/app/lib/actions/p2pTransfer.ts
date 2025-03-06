@@ -59,8 +59,9 @@ export const p2pTransfer = async (amount: number, phoneNumber: string) => {
     return {
       message: `Successfully transfered ${amount} to ${recievingUser.name}`,
     };
-  } catch (error) {
+  } catch (error:any) {
+    console.error(error);
     console.log(error);
-    return { message: "Server Error!" };
+    return { message: `Server Error! ${error?.Error}` };
   }
 };
