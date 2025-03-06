@@ -1,7 +1,14 @@
 import React from "react";
-import { Sidebar } from "../components/sideBar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
+import { redirect } from "next/navigation";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session?.user?.id) {
+    redirect("/");
+  }
   return <>{children}</>;
 };
 

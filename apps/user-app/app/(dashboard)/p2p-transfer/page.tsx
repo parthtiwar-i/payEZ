@@ -1,7 +1,16 @@
-import React from "react";
+import { redirect } from "next/navigation";
+import { P2PTransactions } from "../../components/p2pTransactions";
 import { TransferMoney } from "../../components/transferMoney";
+import { getP2PTransactions } from "../../lib/actions/getP2PTransactions";
 
-export default function Page() {
+export default async function Page() {
+  const transactions = await getP2PTransactions();
+
+  if ("message" in transactions) {
+    //handle message
+    return null;
+  }
+
   return (
     <div className="w-full pl-0 md:pl-64 transition-all duration-300 p-6">
       <div className="max-w-6xl mx-auto">
@@ -11,7 +20,9 @@ export default function Page() {
         <div className=" w-1/2 mb-8">
           {/* Transfer Money to the person */}
           <TransferMoney />
+          {/* SHow all p2p transactions */}
         </div>
+        <P2PTransactions transactions={transactions || {}} />
       </div>
     </div>
   );

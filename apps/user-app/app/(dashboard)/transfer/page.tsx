@@ -3,32 +3,42 @@ import { BalanceCard } from "../../components/balanceCard";
 import { OnRampTransaction } from "../../components/onRampTransaction";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
-import db, { OnRampStatus } from "@repo/db/client";
+import db from "@repo/db/client";
 
 const getBalance = async () => {
-  const session = await getServerSession(authOptions);
+  try {
+    const session = await getServerSession(authOptions);
 
-  const balance = await db.balance.findFirst({
-    where: {
-      userId: Number(session?.user?.id),
-    },
-  });
-  return balance;
+    const balance = await db.balance.findFirst({
+      where: {
+        userId: Number(session?.user?.id),
+      },
+    });
+    return balance;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 const getOnRampTransaction = async () => {
-  const session = await getServerSession(authOptions);
-  const transactions = await db.onRampTransaction.findMany({
-    where: {
-      userId: Number(session?.user?.id),
-    },
-  });
-  return transactions.map((transaction) => ({
-    time: transaction.startTime,
-    amount: transaction.amount,
-    provider: transaction.provider,
-    status: transaction.status,
-  }));
+  try {
+    const session = await getServerSession(authOptions);
+    const transactions = await db.onRampTransaction.findMany({
+      where: {
+        userId: Number(session?.user?.id),
+      },
+    });
+    return transactions.map((transaction) => ({
+      time: transaction.startTime,
+      amount: transaction.amount,
+      provider: transaction.provider,
+      status: transaction.status,
+    }));
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 export default async function () {
@@ -58,7 +68,7 @@ export default async function () {
         </div>
 
         {/* Recent Transactions Card */}
-        <OnRampTransaction transactions={transactions} />
+        <OnRampTransaction transactions={transactions || []} />
       </div>
     </div>
   );
