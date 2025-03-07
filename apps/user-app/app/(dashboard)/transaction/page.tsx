@@ -1,9 +1,5 @@
-import React from 'react'
+import React from "react";
 
-export const Page = () => {
-  return (
-    <div>Transaction</div>
-  )
+export default async function Page() {
+  return <div>Transaction</div>;
 }
-
-export default Page

@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { P2PTransactions } from "../../components/p2pTransactions";
 import { TransferMoney } from "../../components/transferMoney";
 import { getP2PTransactions } from "../../lib/actions/getP2PTransactions";
